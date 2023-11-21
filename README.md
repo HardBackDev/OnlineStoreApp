@@ -3,7 +3,7 @@ To start the project, first open and run OnlineStoreServer.sln, this will create
 # Docker
 To start project in docker, in docker-compose.yml file, replace value of ASPNETCORE_Kestrel__Certificates__Default__Password on your certificate password, if you dont know your certificate password, open cmd and write these command one by one 
 "dotnet dev-certs https --clean", 
-"dotnet dev-certs https -ep %USERPROFILE%\.aspnet\https\onlinestoreserver.pfx -p awesomepass", 
+"dotnet dev-certs https -ep %USERPROFILE%\.aspnet\https\cert.pfx -p awesomepass", 
 "dotnet dev-certs https --trust"
 then just open cmd in root folder and write "docker-compose up --build" command. After container will started, you can view app by url "http://localhost:8082/". 
 # Postman
