@@ -1,0 +1,61 @@
+<section style="left: 20px; position: absolute; position: fixed; bottom: 30%" >
+    <section class="card">
+        <h3>filter by parameters</h3> 
+        <form [formGroup]="productParametersGroup" autocomplete="off">
+    
+            <div>
+                <section>
+                    <label for="minPrice" style="display: flex;">Min Price:</label>
+                    <input (input)="onChange($event)" type="number" formControlName="minPrice" id="minPrice" min="0" max="2147483647" />
+                </section>
+            </div>
+
+            <div>
+                <section>
+                    <label for="maxPrice" style="display: flex;">Max Price:</label>
+                    <input (input)="onChange($event)" type="number" formControlName="maxPrice" id="maxPrice" min="0" max="2147483647" />
+                </section>
+            </div>
+
+            <button class="btn btn-success" (click)="filterByParameters(productParametersGroup.value)"
+            style="margin-top: 20px; margin-left: 25%;">Filter</button>
+        </form>
+    </section>
+</section>
+
+<div class="row" style="margin-top: 5px; margin-left: 40%;">
+    <form>
+        <input class="search-input" type="text" placeholder="Filter by title" #filter (keydown.enter)="filterProducts(filter.value, $event)">
+        <button class="filter-button" type="button" (click)="filterProducts(filter.value, $event)">Search</button>
+    </form>
+</div>
+<h1 style="margin-left: 40%;">
+    Summary Price: {{summaryPrice}}<span>&#8376;</span>
+</h1>
+
+<section *ngIf="!isLoading">
+    <table style="margin-left: 20%; margin-top: 40px; background-color: white;">
+        <tbody>
+            <tr *ngFor="let product of products" style="font-size: 25px; color: black; ">
+                <td style="width: 205px;"><img src="{{product.photoUrl}}" 
+                    style="width: 200px; height: 200px;"></td>
+                <td >{{product.title}}</td>
+                <td>{{ product.price }}<span>&#8376;</span></td>
+                <td>Category: {{ product.category }}</td>
+                <td style="padding: 20px;">
+                    <div>
+                        <div class="row">
+                            <button class="btn btn-info" [routerLink]="['/products/category', product.category, product.id]">Details</button>
+                        </div>
+                        <div class="row">
+                        <button class="btn btn-danger" style="margin-top: 5px;" (click)="deleteFromCart(product.id)">Delete from cart</button>    
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+<div *ngIf="!isLoading && metadata.TotalPages > metadata.CurrentPage" id="loading-element" class="loader" style="margin-left: 50%;"></div>
+
+

@@ -1,0 +1,45 @@
+<div *ngIf="productMetadata" class="container-fluid">
+    <form [formGroup]="productForm" autocomplete="off" novalidate (ngSubmit)="updateProduct(productForm.value)">
+        <div class="card card-body bg-light mb-2 mt-2">
+            <h1>Update product for {{category}}</h1>
+            <hr>
+            <div *ngFor="let controll of productControls">
+                <div class="row mb-3">
+                    <label for="{{controll.property}}" class="col-form-label col-md-2">{{controll.property}}: </label>
+                    <div class="col">
+                        <div *ngIf="!productMetadata.onlyDefaultValuesProperties.includes(controll.property)">
+                            <input #propertyInput type="{{controll.type}}" formControlName="{{controll.property}}" id="{{controll.property}}" 
+                            class="form-control" style="width: 65%;"/>
+                        </div>
+                        <select *ngIf="productMetadata.propertiesValues[controll.property] != null" class="select-value" id="{{controll.property}}Select" 
+                            (change)="selectParameterChange($event, controll.property, propertyInput)">
+                            <option *ngFor="let value of productMetadata.propertiesValues[controll.property]" 
+                            value="{{value}}">{{value}}</option>
+                        </select>
+                        <div class="col-md-5" style="color: red;">
+                            <em *ngIf="validateControl(controll.property) 
+                            && hasError(controll.property, 'required')">{{controll.property}} is required</em>
+                        </div>
+                    </div>
+                </div>      
+            </div>
+
+            <br><br>
+
+            <div class="mb-3 row">
+                <div class="offset-5 col-md-1">
+                    <button type="submit" class="btn btn-info">Save</button>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" (click)="back()">Cancel</button>
+                </div>
+            </div>
+            <div *ngIf="errorMessage" >
+                <div *ngFor="let error of errors">
+                    <strong style="color: red;">{{ error.key }}:</strong> {{ error.value }}
+                </div>      
+            </div>
+        </div>
+    </form>
+</div>
+  

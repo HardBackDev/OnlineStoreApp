@@ -1,0 +1,22 @@
+<div class="container" style="overflow: auto">
+    <img src="{{photoUrl}}" style="max-width: 1000px; max-height: 1200px; min-width: 50%; min-height: 40%; margin-left: 25%;"/>
+    <section style="margin: 2%; ">
+            <table>
+                <tbody>
+                    <tr *ngFor="let prop of productProps">
+                    <td style="font-size: 25px; color: black;">{{ prop.key }}:</td>
+                    <td style="font-size: 20px; color: black;">{{ prop.value }}<span *ngIf="prop.key == 'price'">&#8376;</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+    </section>
+    <div class="row">
+      <div class="offset-md-3 col-md-1">
+        <button type="submit" class="btn btn-info" (click)="deleteProduct()">Delete</button>
+      </div>
+      <div class="col-md-1">
+        <button type="button" class="btn btn-danger" (click)="back()">Cancel</button>
+      </div>
+    </div>
+</div>

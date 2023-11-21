@@ -1,0 +1,47 @@
+<div *ngIf="isLoading" id="loading-element" class="page-loader"></div>
+<section *ngIf="showMessage || isLoading" class="blur-screen"></section>
+
+<section *ngIf="showMessage" class="product-added-modal">
+    <h1>
+        Product was added to cart:
+    </h1>
+    <h3>{{title}}</h3>
+    <img src="{{photoUrl}}" width="350px" height="350px">
+    <h4>{{price}}<span>&#8376;</span></h4>
+    <section style="display: flex; margin-top: 30px; margin-left: 40%;">
+        <button class="btn btn-success" (click)="showMessage = null">Ok</button>
+        <button style="margin-left: 30px;" class="btn btn-info" (click)="showMessage = null" [routerLink]="'/products/cart'">Go to cart</button>
+    </section>
+</section>
+
+<div *ngIf="!isLoading" class="container" style="overflow: auto">
+    <img src="{{photoUrl}}" style="min-width: 35%; min-height: 35%; margin-left: 32.5%;"/>
+    <div style="text-align: center;">
+        <hr>
+        <h1>{{title}}</h1>
+        <hr>
+        <h1>{{price}}<span>&#8376;</span></h1>
+        <hr>
+        <div>
+            <div *ngIf="authService.isUserAuthenticated()" class="row" style="width: 40%; margin-left: 30%;">
+                <button *ngIf="!productInCart" style="width: 100%;" class="btn btn-info" 
+                (click)="$event.preventDefault(); addToCart()">Add to cart</button>
+                <button *ngIf="productInCart" (click)="$event.preventDefault(); deleteProductFromCart()"
+                    style="width: 100%;" class="btn btn-danger" >Remove from cart</button>
+            </div>
+            <div class="row" style="width: 40%; margin-left: 30%; margin-top: 10px;">
+                <button class="btn btn-success" (click)="back()">Back to list</button>    
+            </div>
+        </div>
+        <hr>
+        <h1>Characteristics:</h1>
+        <table>
+            <tbody style="text-align: left;">
+                <tr *ngFor="let prop of productProps">
+                    <td>{{ prop.key }}:</td>
+                    <td>{{ prop.value }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

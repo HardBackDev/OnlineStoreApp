@@ -1,0 +1,41 @@
+.grid-container {
+    margin: auto;
+    display: grid;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 100px;
+    grid-template-columns: repeat(4, auto);
+    gap: 10px;
+    background-color: #2196F3;
+    padding: 10px;
+  }
+
+.grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+    }
+  
+  input[type="text"] {
+    border: solid 1px var(--primary-color);
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 4px;
+    display: inline-block;
+    width: 30%;
+    background-color: sienna;
+    
+  }
+  
+  button {
+    padding: 10px;
+    border: solid 1px var(--primary-color);
+    background: var(--primary-color);
+    color: black;
+    background-color: green;
+    border-radius: 8px;
+  }
+  input::placeholder {
+    color: black;
+  }

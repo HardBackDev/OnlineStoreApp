@@ -1,0 +1,80 @@
+<div *ngIf="isLoading" id="loading-element" class="page-loader"></div>
+<button class="btn btn-success" style="left: 35%; position: absolute; top: 65px;" [routerLink]="''">Back</button>
+<button class="btn btn-info page-up-buttom" (click)="pageUp()">Page up</button>
+<section *ngIf="addedProduct || isLoading" class="blur-screen"></section>
+<section *ngIf="addedProduct" class="product-added-modal">
+    <h1>
+        Product was added to cart:
+    </h1>
+    <h3>{{addedProduct.title}}</h3>
+    <img src="{{addedProduct.photoUrl}}" width="350px" height="350px">
+    <h4>{{addedProduct.price}}<span>&#8376;</span></h4>
+    <section style="display: flex; margin-top: 30px; margin-left: 40%;">
+        <button class="btn btn-success" (click)="addedProduct = null">Ok</button>
+        <button style="margin-left: 30px;" class="btn btn-info" (click)="addedProduct = null" [routerLink]="'/products/cart'">Go to cart</button>
+    </section>
+</section>
+
+
+<section style="left: 20px; position: absolute; position: fixed; bottom: 30%" >
+    <section class="card">
+        <h3>filter by parameters</h3> 
+        <form [formGroup]="productParametersGroup" autocomplete="off">
+            <div>
+                <section>
+                    <label for="minPrice" style="display: flex;">Min Price:</label>
+                    <input (input)="onChange($event)" type="number" formControlName="minPrice" id="minPrice" min="0" max="2147483647" />
+                </section>
+            </div>
+            <div>
+                <section>
+                    <label for="maxPrice" style="display: flex;">Max Price:</label>
+                    <input (input)="onChange($event)" type="number" formControlName="maxPrice" id="maxPrice" min="0" max="2147483647" />
+                </section>
+            </div>
+            <button class="btn btn-success" (click)="filterByParameters(productParametersGroup.value)"
+            style="margin-top: 20px; margin-left: 25%;">Filter</button>
+        </form>
+    </section>
+</section>
+
+<div class="row" style="margin-top: 5px; margin-left: 40%;">
+    <form>
+        <input type="text" class="search-input" placeholder="Filter by title" #filter (keydown.enter)="filterProducts(filter.value, $event)">
+        <button class="filter-button" type="button" (click)="filterProducts(filter.value, $event)">Search</button>
+    </form>
+</div>
+
+<section *ngIf="!isLoading" class="products-section">
+    <div class="products-grid">
+        <div *ngFor="let product of products">
+            <img src="{{product.photoUrl}}" style="max-height: 300px; max-width: 300px; cursor: pointer;" alt="Example Image" 
+            [routerLink]="['/products/category', product.category, product.id]">
+            <hr>
+            {{product.title}}
+            <hr>
+            {{product.price}}<span>&#8376;</span>
+            <hr>
+            <a style="cursor: pointer; color: blue;" [routerLink]="['/products/category', product.category]">{{product.category}}</a>
+            <div *ngIf="authService.isUserAuthenticated()">
+                <hr>
+                <div *ngIf="product.inCart != null">
+                    <button *ngIf="!product.inCart" style="width: 100%;" class="btn btn-info" 
+                    (click)="$event.preventDefault(); addProductToCart(product);">Add to cart</button>
+                    <button *ngIf="product.inCart" (click)="$event.preventDefault(); deleteProductFromCart(product)"
+                        style="width: 100%;" class="btn btn-danger" >Remove from cart</button>    
+                </div>
+                <div *ngIf="product.inCart == null" id="loading-element" style="margin-left: 45%;" class="loader"></div>
+            </div>
+            <section *ngIf="_authService.isUserAdmin()">
+                <hr>
+                <button style="width: 100%;" class="btn btn-success" (click)="routeTo('update', product.category, product.id)">Update</button>
+                <hr>
+                <button style="width: 100%;" class="btn btn-danger" (click)="routeTo('delete', product.category, product.id)">Delete</button>
+            </section>
+        </div>
+    </div>
+    <div *ngIf="isLoadingNext" id="loading-element" class="loader" style="margin-left: 49%;"></div>
+</section>
+
+

@@ -1,0 +1,17 @@
+<div *ngIf="isLoading" id="loading-element" class="page-loader" style="position: absolute;"></div>
+
+<div style="align-items: center; justify-content: center; display: flex; margin-top: 10px; background-color: aliceblue;">
+    <h1>Categories</h1>
+</div>
+
+<div class="grid-container">
+    <div *ngFor="let category of categories" [routerLink]="['/products/category', category.name]">
+        <div>
+            <div>
+                <img src="{{category.photoUrl}}" style="height: 200px; width: 260px;" alt="Example Image">
+            </div>
+            <hr>
+            <h3>{{category.name}}</h3>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+.container{
+    margin-top: 20px;
+    padding: 20px 20px;
+    border: 1px solid #000;
+    border-width: 4px;
+    border-color: black;
+    border-radius: 10px;
+    background-color: gainsboro;
+    width: 60%;
+    margin-left: 20%;
+  }
+
+table {
+  width: 100%;
+}
+
+td {
+  padding: 10px;
+  font-size: 20px;
+  color: black;
+  border-bottom-width: 5px;
+  border-top-width: 5px;
+  border-color: black;
+  font-size: 25px; color: black;
+}
+
+.product-added-modal{
+  background-color: rgb(4, 7, 108);
+  color: white;
+  width: 60%;
+  height: 80%;
+  left: 20%;
+  top: 10%;
+  position: absolute;
+  z-index: 4;
+  position: fixed;
+  text-align: center;
+  border: solid 4px black;
+}
+
+.blur-screen{
+  height: 150%;
+  width: 100%;
+  margin-top: -25%;
+  z-index: 3;
+  position: absolute;
+  position: fixed;
+  background-color: rgb(32, 29, 29);
+  opacity: 0.6;
+}

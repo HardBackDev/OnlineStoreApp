@@ -1,0 +1,11 @@
+.blur-screen{
+    height: 150%;
+    width: 100%;
+    margin-top: -25%;
+    z-index: 3;
+    position: absolute;
+    position: fixed;
+    background-color: rgb(32, 29, 29);
+    opacity: 0.6;
+  }
+  

@@ -1,0 +1,100 @@
+<button *ngIf="authService.isUserAdmin()" class="btn btn-success" 
+style="left: 50px; position: absolute; top: 65px;" [routerLink]="'create'">Create Product</button>
+<button class="btn btn-success" style="left: 35%; position: absolute; top: 65px;" [routerLink]="''">Back</button>
+<div class="row" style="margin-top: 5px; margin-left: 40%;">
+    <form>
+        <input type="text" class="search-input" placeholder="Filter by title" #filter (keydown.enter)="filterProducts(filter.value, $event)">
+        <button class="filter-button" type="button" (click)="filterProducts(filter.value, $event)">Search</button>
+    </form>
+</div>
+<button class="btn btn-info page-up-buttom" (click)="pageUp()">Page up</button>
+
+<div *ngIf="isLoading" id="loading-element" class="page-loader"></div>
+<section *ngIf="addedProduct || isLoading" class="blur-screen"></section>
+
+<section *ngIf="addedProduct" class="product-added-modal">
+    <h1>
+        Product was added to cart:
+    </h1>
+    <h3>{{addedProduct.title}}</h3>
+    <img src="{{addedProduct.photoUrl}}" width="350px" height="350px">
+    <h4>{{addedProduct.price}}<span>&#8376;</span></h4>
+    <section style="display: flex; margin-top: 30px; margin-left: 40%;">
+        <button class="btn btn-success" (click)="addedProduct = null">Ok</button>
+        <button style="margin-left: 30px;" class="btn btn-info" (click)="addedProduct = null" [routerLink]="'/products/cart'">Go to cart</button>
+    </section>
+</section>
+
+<section style="left: 20px; position: absolute; top: 12%; height: 80%; position: fixed; width: 22%;">
+    <section class="card" style="height: 100%; overflow: hidden;">
+        <h3>filter by parameters</h3> 
+        <form *ngIf="parametersMetadata" [formGroup]="productParametersGroup" autocomplete="off" style="overflow: scroll; overflow-x: hidden;">
+            <div *ngIf="parametersMetadata.orderByColumns">
+                <label for="orderBy" style="display: flex;">Order By:</label>
+                <select id="order-column" (change)="orderByChange()" style="width: 81%; margin-top: 5px;">
+                    <option *ngFor="let value of parametersMetadata.orderByColumns" value="{{value}}">
+                        <a *ngIf="parametersMetadata.parametersNames[value] != null">{{parametersMetadata.parametersNames[value]}}</a>
+                        <a *ngIf="parametersMetadata.parametersNames[value] == null">{{value}}</a>
+                    </option>
+                </select>
+                <select id="order-direction" (change)="orderByChange()" style="width: 81%; margin-top: 5px;">
+                    <option value="Desc">Descending </option>
+                    <option value="Asc">Ascending </option>
+                </select>
+            </div>
+
+            <div *ngFor="let controll of parametersControlls">
+                <hr>
+                <label for="{{controll.parameter}}" style="display: flex;">{{ controll.parameterName }}:</label>
+                <input type="{{controll.valueType}}" [formControlName]="controll.parameter" formControlName="{{controll.parameter}}" 
+                id="{{controll.parameter}}" style="display: flex;" #parameterInput (keydown.enter)="filterByParameters(productParametersGroup.value)"/>
+                <select *ngIf="checkSearchParameterExist(controll.parameter)" class="select-parameter" id="{{controll.parameter}}-select"
+                onfocus='this.size=10;' onblur='this.size=1;' onchange='this.size=1; this.blur();'
+                    (change)="selectParameterChange($event, parameterInput)">
+                    <option value="">Any</option>
+                    <option *ngFor="let value of getParameterSearchValues(controll.parameter)" 
+                    value="{{value}}">{{value}}</option>
+                </select>
+            </div>        
+        </form>
+        <button class="btn btn-success" (click)="filterByParameters(productParametersGroup.value)" style="margin-top: 10px;">Filter</button>
+    </section>
+</section>
+
+<h1 *ngIf="products == null || products.length == 0" style="text-align: center;">
+    No products found
+</h1>
+
+<h1 *ngIf="metadata" style="text-align: center; margin-top: 20px;">
+    Total Count: {{metadata.TotalCount}}
+</h1>
+
+<section *ngIf="!isLoading" class="products-section">
+    <div class="products-grid">
+        <div *ngFor="let product of products">
+            <img src="{{product.photoUrl}}" style="max-height: 300px; max-width: 300px; cursor: pointer;" alt="Example Image" 
+            [routerLink]="['/products/category', product.category, product.id]">
+            <hr>
+            <p>{{product.title}}</p>
+            <hr>
+            {{product.price}}<span>&#8376;</span>
+            <div *ngIf="authService.isUserAuthenticated()">
+                <hr>
+                <div *ngIf="product.inCart != null">
+                    <button *ngIf="!product.inCart" style="width: 100%;" class="btn btn-info" 
+                    (click)="$event.preventDefault(); addProductToCart(product);">Add to cart</button>
+                    <button *ngIf="product.inCart" (click)="$event.preventDefault(); deleteProductFromCart(product)"
+                        style="width: 100%;" class="btn btn-danger" >Remove from cart</button>    
+                </div>
+                <div *ngIf="product.inCart == null" id="loading-element" style="margin-left: 45%;" class="loader"></div>
+            </div>
+            <section *ngIf="authService.isUserAdmin()">
+                <hr>
+                <button style="width: 100%;" class="btn btn-success" (click)="routeTo('update', product.category, product.id)">Update</button>
+                <hr>
+                <button style="width: 100%;" class="btn btn-danger" (click)="routeTo('delete', product.category, product.id)">Delete</button>
+            </section>
+        </div>    
+    </div>
+    <div *ngIf="isLoadingNext" id="loading-element" style="margin-left: 48%;" class="loader"></div>
+</section>
